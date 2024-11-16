@@ -10,18 +10,18 @@ We (`wemod-launcher`) enable you to run it on Linux (and by extension, the Steam
 ## Support
 If this helps you, please star the project.  
 If you would like to support the project, manly we need some more developers.
-  <br>You can also support the original developer DaniAsh551:
-    &nbsp;
-    <a href="https://www.buymeacoffee.com/TIjUvF1" target="_blank">On Buymeacoffee,</a>
-    <a href="https://www.patreon.com/daniash551" target="_blank">On Patreon,</a>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=D7Y43PT9HUEUY" target="_blank">On PayPal</a>
-  <br>You can support the current developer Marvin1099: 
-    &nbsp;
-    <a href="https://www.patreon.com/marvin1099" target="_blank">On Patreon,</a>
-    <a href="https://www.tipeeestream.com/marvin1099/tip" target="_blank">On Tipeeestream</a>
-  <br>You can also suport the developer JohnHamwi:
-    &nbsp;
-    <a href="https://github.com/JohnHamwi" target="_blank">On Github</a>
+	<br>You can also support the original developer DaniAsh551:
+		&nbsp;
+		<a href="https://www.buymeacoffee.com/TIjUvF1" target="_blank">On Buymeacoffee,</a>
+		<a href="https://www.patreon.com/daniash551" target="_blank">On Patreon,</a>
+		<a href="https://www.paypal.com/donate/?hosted_button_id=D7Y43PT9HUEUY" target="_blank">On PayPal</a>
+	<br>You can support the current developer Marvin1099: 
+		&nbsp;
+		<a href="https://www.patreon.com/marvin1099" target="_blank">On Patreon,</a>
+		<a href="https://www.tipeeestream.com/marvin1099/tip" target="_blank">On Tipeeestream</a>
+	<br>You can also suport the developer JohnHamwi:
+		&nbsp;
+		<a href="https://github.com/JohnHamwi" target="_blank">On Github</a>
 <br>
 <br>But realy if you can help with some code that would be geat.
 <br>You are also welcome to report your findings/suggestions.
@@ -37,33 +37,33 @@ Check the [Wiki Changelog](https://github.com/DaniAsh551/wemod-launcher/wiki/Cha
 consider using **[RustDesk](https://github.com/rustdesk/rustdesk/releases/latest)** for easier setup (the `.flatpak` is easiest).
 
 - **Important:** There is currently a Proposal to change the Lisence of the wemod launcher from MIT to AGLP.  
-  Please vote with your opinion right here: [Proposal #131](https://github.com/DeckCheatz/wemod-launcher/discussions/131).
+	Please vote with your opinion right here: [Proposal #131](https://github.com/DeckCheatz/wemod-launcher/discussions/131).
 
 1. First `Python venv` and `TK` need to be installed  
-   TK / Tkinter may have a other name in your repos  
-   Search the internet for `install Tkinter for YOURDISTRO` (eg. Ubuntu)
+	TK / Tkinter may have a other name in your repos  
+	Search the internet for `install Tkinter for YOURDISTRO` (eg. Ubuntu)
 2. Also Search for and install `ProtonUp-QT` in the store.
 3. Download the latest `GE-Proton` in `ProtonUp-QT`  
-   **NOTE:** After some testing it seams `Proton` also works  
-   So you can try to run the launcher with `Proton` and without `GE-Proton`
+	**NOTE:** After some testing it seams `Proton` also works  
+	So you can try to run the launcher with `Proton` and without `GE-Proton`
 4. Restart Steam/SteamOS
 5. Run `git clone https://github.com/DaniAsh551/wemod-launcher.git` in the Konsole/Terminal
 6. Run `sudo chmod -R ug+x /home/$USER/wemod-launcher` in the Konsole/Terminal  
-   **NOTE:** For use with the Steam Flatpak (not recomended) contiune [here](https://github.com/DaniAsh551/wemod-launcher/wiki/Steam-Flatpak-Usage)
+	**NOTE:** For use with the Steam Flatpak (not recomended) contiune [here](https://github.com/DaniAsh551/wemod-launcher/wiki/Steam-Flatpak-Usage)
 7. In the WeMod chosen game, open the steam game settings  
-   and in the `Compatibility` tab change the proton version to the downloaded one.
+	and in the `Compatibility` tab change the proton version to the downloaded one.
 8. Also add the command `/home/$USER/wemod-launcher/wemod %command%`,  
-   in the steam game settings under `Launch Options`
+	in the steam game settings under `Launch Options`
 9. Start the game
 10. Select no to the copy prefix question if it says it `might work`  
-   If it says it `likely works` go to 12.
+	If it says it `likely works` go to 12.
 11. Select download
 12. Select Yes/Ok until no more windows appear  
-    All rundll32.exe errors can safely be ignored (click on `no` here)
+	All rundll32.exe errors can safely be ignored (click on `no` here)
 13. WeMod will start with the game
 14. Login and click play in WeMod for chosen game   
 15. Set Mods and Switch to game or close the WeMod window,  
-    it will keep running in the background
+		it will keep running in the background
 </div>
 
 The wemod-launcher will automatically update if you installed it using step 5.  
@@ -85,9 +85,9 @@ The wemod-launcher will automatically update if you installed it using step 5.
 <div><img src="https://cdn.discordapp.com/emojis/999743709677633536.gif?size=20&quality=lossless" alt="WeModApp"/>&nbsp;<b>If you find this guide helpful, we encourage you to star the project.</b></div><br> 
 
 <a href="https://star-history.com/#DaniAsh551/wemod-launcher&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date" />
- </picture>
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date&theme=dark" />
+		<source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date" />
+		<img alt="Star History Chart" src="https://api.star-history.com/svg?repos=DaniAsh551/wemod-launcher&type=Date" />
+	</picture>
 </a>

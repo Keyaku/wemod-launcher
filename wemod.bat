@@ -29,27 +29,27 @@ echo Cheking for running WeMod pid
 set wemodPID=
 REM Get the wemod pid over proton
 for /F "TOKENS=1,2,*" %%a in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
-    set void=%%a
-    set wemodPID=%%b
+	set void=%%a
+	set wemodPID=%%b
 )
 REM On fail try once more to get the wemod pid over proton
 if not defined wemodPID (
-    for /F "TOKENS=1,2,*" %%a in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
-        set void=%%a
-        set wemodPID=%%b
-    )
+	for /F "TOKENS=1,2,*" %%a in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
+		set void=%%a
+		set wemodPID=%%b
+	)
 )
 REM If still not set get wemod pid over wine
 if not defined wemodPID (
-    for /F "TOKENS=2 delims=," %%d in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
-        set wemodPID=%%d
-    )
+	for /F "TOKENS=2 delims=," %%d in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
+		set wemodPID=%%d
+	)
 )
 REM On fail try once more to get wemod pid over wine
 if not defined wemodPID (
-    for /F "TOKENS=2 delims=," %%d in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
-        set wemodPID=%%d
-    )
+	for /F "TOKENS=2 delims=," %%d in ('C:/windows/system32/tasklist /FI "IMAGENAME eq %wemodname%" 2>NUL') do (
+		set wemodPID=%%d
+	)
 )
 
 echo WeMod found with pid %wemodPID%
@@ -63,22 +63,22 @@ echo.
 echo The game was closed
 
 if defined wemodPID (
-    if exist %temptime% (
-        del %temptime%
-        echo Game closed to fast, Game detection may have failed > %returnfile%
-        echo.
-        echo Game closed to fast, Game detection may have failed, sending problem to python script and waiting for awnser
-        :WaitUser
-        @ping localhost -n 1 > NUL 2>&1
-        if exist %returnfile% (
-            goto WaitUser
-        )
-    )
-    echo Closing WeMod
-    C:/windows/system32/taskkill.exe /PID %wemodPID% /F 2>NUL
-    C:/windows/system32/taskkill.exe /PID %wemodPID% /F 2>NUL
-    echo.
-    echo Killed %wemodname% with pid %wemodPID%
+	if exist %temptime% (
+		del %temptime%
+		echo Game closed to fast, Game detection may have failed > %returnfile%
+		echo.
+		echo Game closed to fast, Game detection may have failed, sending problem to python script and waiting for awnser
+		:WaitUser
+		@ping localhost -n 1 > NUL 2>&1
+		if exist %returnfile% (
+			goto WaitUser
+		)
+	)
+	echo Closing WeMod
+	C:/windows/system32/taskkill.exe /PID %wemodPID% /F 2>NUL
+	C:/windows/system32/taskkill.exe /PID %wemodPID% /F 2>NUL
+	echo.
+	echo Killed %wemodname% with pid %wemodPID%
 )
 
 echo.
