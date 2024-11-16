@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import shutil
-import threading
 import subprocess
+import sys
+import threading
 
 from typing import Optional
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 		if int(inf_protect) > 4:
 			exit_with_message(
 				"Infinite rerun",
-				"Infinite script reruns were detected\nThe script was stoped\nCreate a issue on the wemod_launcher github\nand add this file to the issue",
+				"Infinite script reruns were detected\nThe script was stopped\nCreate a issue on the wemod_launcher github\nand add this file to the issue",
 			)
 		os.environ["WeModInfProtect"] = str(int(inf_protect) + 1)
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 			log(f"Unknown rerun command error:\n\t{e}")
 			exit_with_message(
 				"Unknown Command error",
-				f"The command to rerun the script failed becalse the command returned an unknown error:\n\t{e}\nYou are probably using flatpak,\nif that is the case install flatpak-xdg-utils\nand allow system and session bus in flatseal",
+				f"The command to rerun the script failed because the command returned an unknown error:\n\t{e}\nYou are probably using flatpak,\nif that is the case install flatpak-xdg-utils\nand allow system and session bus in flatseal",
 			)
 
 		if len(if_flatpak_list) > 1:
