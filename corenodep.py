@@ -34,10 +34,10 @@ def check_dependencies(requirements_file: str) -> bool:
 			package = line.strip().split("==")[0].strip()
 			try:
 				importlib.import_module(package)
-			except ImportError:
-				from coreutils import log
+			except ImportError as e:
+				from coreutils import log_err
 
-				log(f"Package '{package}' is missing")
+				log_err(f"{e}")
 				ret = False
 	return ret
 
@@ -55,10 +55,10 @@ def load_conf_setting(
 def save_conf_setting(
 	setting: str, value: Optional[str] = None, section: str = DEF_SECTION
 ) -> None:
-	from coreutils import log
+	from coreutils import log_err
 
 	if not isinstance(section, str):
-		log("Error adding the given section, it wasn't a string")
+		log_err("param 'section' is not of type string")
 		return
 	if section not in CONFIG:
 		CONFIG[section] = {}
@@ -68,7 +68,7 @@ def save_conf_setting(
 	elif isinstance(value, str):
 		CONFIG[section][setting] = value
 	else:
-		log("Error saving given value, it wasn't a sting or none")
+		log_err("param 'value' is not of type string or none")
 		return
 	with open(CONFIG_PATH, "w") as configfile:
 		CONFIG.write(configfile)
