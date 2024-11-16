@@ -71,10 +71,10 @@ def log(message: Optional[str] = None, open_log: bool = False) -> None:
 			os.system(f"xdg-open '{wemodlog}'")
 
 def log_err(message: Optional[str] = None, open_log: bool = False) -> None:
-	log(f"[Error] {inspect.stack()[1][3]}:" + message, open_log)
+	log(f"[Error] {inspect.stack()[1][3]}: " + message, open_log)
 
 def log_warn(message: Optional[str] = None, open_log: bool = False) -> None:
-	log(f"[Warn] {inspect.stack()[1][3]}:" + message, open_log)
+	log(f"[Warn] {inspect.stack()[1][3]}: " + message, open_log)
 
 # Function to display a message
 def show_message(
