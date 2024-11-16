@@ -52,8 +52,8 @@ else:
 SCRIPT_PATH = os.path.dirname(SCRIPT_IMP_FILE)
 
 
-# Enshure that wine is isntalled
-def enshure_wine(verstr: Optional[str] = None) -> str:
+# Ensure that wine is isntalled
+def ensure_wine(verstr: Optional[str] = None) -> str:
 	WinePfx = os.path.join(BASE_STEAM_COMPAT, "drive_c")
 	ProtonPfx = os.path.join(WINEPREFIX, "drive_c")
 	if os.path.isdir(WinePfx):
@@ -102,13 +102,13 @@ def enshure_wine(verstr: Optional[str] = None) -> str:
 			resp = None
 			while not got:
 				resp, tout = get_user_input(
-					"Imput wine version", "Version file", "WineGE8.26", 40
+					"Input wine version", "Version file", "WineGE8.26", 40
 				)
 				got = parse_version(resp)
 				if not got:
 					show_message(
-						"The version string was incorrect.\nMake shure you have at least 1 number in the version string",
-						"Incorect version",
+						"The version string was incorrect.\nMake sure you have at least 1 number in the version string",
+						"Incorrect version",
 						20,
 						False,
 					)
@@ -119,7 +119,7 @@ def enshure_wine(verstr: Optional[str] = None) -> str:
 	else:
 		exit_with_message(
 			"Missing Prefix",
-			"Error, wineprefix is missing,\nmake shure you run the game without the wemod-laucher once",
+			"Error, wineprefix is missing,\nmake sure you run the game without the wemod-launcher once",
 			ask_for_log=True,
 		)
 
@@ -371,7 +371,7 @@ def troubleshooter() -> None:
 					"Enable troubleshooter for this game",
 				],
 				["Delete Gameprefix", "Delete Wemod.exe"],
-				["Close wemod-laucher"],
+				["Close wemod-launcher"],
 			],
 			120,
 		)
@@ -396,6 +396,6 @@ def troubleshooter() -> None:
 				shutil.rmtree(STEAM_COMPAT_FOLDER)
 			except Exception as e:
 				pass
-		elif not ret or ret == "Close wemod-laucher":
+		elif not ret or ret == "Close wemod-launcher":
 			runtro = False
 			log("Closing troubleshooter as requested")

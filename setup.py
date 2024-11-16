@@ -252,13 +252,13 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 	if int(infinite) > 3:
 		return path
 	elif int(infinite) > 2:
-		log("Self update skipped, beclase updates where made already.")
+		log("Self update skipped: already up-to-date.")
 		return path
 	elif getattr(sys, "frozen", False):
-		log("Self update skipped, becalse script was compiled")
+		log("Self update skipped: script was compiled")
 		return path
 	elif upd and upd.lower() == "false":
-		log("Self update skipped, becalse it was requested in the config")
+		log("Self update skipped: manually requested in the config")
 		return path
 
 	original_cwd = os.getcwd()
@@ -407,7 +407,7 @@ def setup_main() -> None:
 		unpacked = unpack_wemod(setup_file, temp_dir, install_location)
 
 		show_message(
-			"Setup completed successfully.\nMake shure the LAUNCH OPTIONS of the game say '"
+			"Setup completed successfully.\nMake sure the LAUNCH OPTIONS of the game say '"
 			+ str(os.path.join(SCRIPT_PATH, "wemod"))
 			+ " %command%'",
 			title="Wemod Downloaded",

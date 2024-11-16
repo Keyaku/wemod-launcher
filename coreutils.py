@@ -65,8 +65,7 @@ def log(message: Optional[str] = None, open_log: bool = False) -> None:
 		if not os.path.isabs(wemodlog):
 			wemodlog = os.path.abspath(os.path.join(SCRIPT_PATH, wemodlog))
 		with open(wemodlog, "a") as f:
-			if message != None:
-				f.write(message)
+			f.write(message)
 		if open_log:
 			os.system(f"xdg-open '{wemodlog}'")
 
@@ -169,7 +168,7 @@ def pip(command: str, venv_path: Optional[str] = None) -> int:
 			log("Externally managed environment detected.")
 			return 99
 		else:
-			log(f"Pip error appered:\n\t{stdout}\n\t{stderr}")
+			log(f"Pip error appeared:\n\t{stdout}\n\t{stderr}")
 	else:
 		process = subprocess.Popen(
 			f"'{pos_pip}' {command}",
@@ -188,10 +187,10 @@ def pip(command: str, venv_path: Optional[str] = None) -> int:
 			return 99
 		else:
 			show_message(
-				"The pip inside the virtual environment reported a error,\nthis may require the deletion of the virtual environment folder,\nby defalut the folder is named named wemod_venv\nand is located inside the wemod-laucher folder"
+				"The pip inside the virtual environment reported a error,\nthis may require the deletion of the virtual environment folder,\nby defalut the folder is named named wemod_venv\nand is located inside the wemod-launcher folder"
 			)
 			log(
-				f"A pip error appered\nthis may require the deletion of the virtual environment folder,\nby defalut the folder is named named wemod_venv\nand is located inside the wemod-laucher folder,\nthe error is:\n\t{stdout}\n\t{stderr}"
+				f"A pip error appeared\nthis may require the deletion of the virtual environment folder,\nby defalut the folder is named named wemod_venv\nand is located inside the wemod-launcher folder,\nthe error is:\n\t{stdout}\n\t{stderr}"
 			)
 
 	# Try to use the built-in pip
@@ -210,7 +209,7 @@ def pip(command: str, venv_path: Optional[str] = None) -> int:
 		log("Externally managed environment detected.")
 		return 99
 	else:
-		log(f"Pip error appered:\n\t{stdout}\n\t{stderr}")
+		log(f"Pip error appeared:\n\t{stdout}\n\t{stderr}")
 
 	# If -m pip failed, fallback to using pip.pyz
 	if venv_path:
@@ -251,7 +250,7 @@ def pip(command: str, venv_path: Optional[str] = None) -> int:
 		log("Externally managed environment detected.")
 		return 99
 	else:
-		log(f"Pip error appered:\n\t{stdout}\n\t{stderr}")
+		log(f"Pip error appeared:\n\t{stdout}\n\t{stderr}")
 
 	# Return the exit code of the process
 	return process.returncode
@@ -432,13 +431,13 @@ def get_user_input(
 
 
 def script_manager() -> None:
-	script_name = "wemod-laucher"
+	script_name = "wemod-launcher"
 	script_version = "1.503"
 	last_name = load_conf_setting("ScriptName")
 	last_version = load_conf_setting("Version")
 
 	if last_name and last_name != script_name:
-		log("Warnig config might be for a other script, overwriting name")
+		log("Warning config might be for another script, overwriting name")
 	elif not last_name:
 		log("Adding script name to config")
 	if last_version:
@@ -449,11 +448,11 @@ def script_manager() -> None:
 				)
 			elif float(last_version) > float(script_version):
 				log(
-					f"Warnig config on version {last_version} downgrading to {script_version}"
+					f"Warning config on version {last_version} downgrading to {script_version}"
 				)
 		except Exception as e:
 			log(
-				f"Warnig config error '{e}' changing version to {script_version}"
+				f"Warning config error '{e}' changing version to {script_version}"
 			)
 	else:
 		log("Adding script version to config")

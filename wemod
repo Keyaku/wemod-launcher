@@ -62,7 +62,7 @@ SCRIPT_PATH = os.path.dirname(SCRIPT_FILE)
 if __name__ == "__main__":
 	# Print version and update config
 	script_manager()
-	# Make venv if needed andreturn path
+	# Make venv if needed and return path
 	python_venv = venv_manager()
 	# Update the script
 	python_venv = self_update(python_venv)
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 		if int(inf_protect) > 4:
 			exit_with_message(
 				"Infinite rerun",
-				"Infinite script reruns were detected\nThe script was stoped\nCreate a issue on the wemod_laucher github\nand add this file to the issue",
+				"Infinite script reruns were detected\nThe script was stoped\nCreate a issue on the wemod_launcher github\nand add this file to the issue",
 			)
 		os.environ["WeModInfProtect"] = str(int(inf_protect) + 1)
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 from constutils import (
 	scanfolderforversions,
 	troubleshooter,
-	enshure_wine,
+	ensure_wine,
 	winetricks,
 	wine,
 )
@@ -163,7 +163,7 @@ def syncwemod(
 			log(f"Version is not set for {BASE_STEAM_COMPAT}, Error")
 			exit_with_message(
 				"Prefix Version unknown",
-				"The prefix version is unknown, please make shure the prefix works with WeMod before trying to zip it",
+				"The prefix version is unknown, please make sure the prefix works with WeMod before trying to zip it",
 				timeout=20,
 			)
 		cut_proton_version = parse_version(current_proton_version)
@@ -233,7 +233,7 @@ def syncwemod(
 	)  # link dest
 
 	log(
-		f"Syncing wemod data from '{WeModExtenal}' to laucher dir '{WeModData}'"
+		f"Syncing wemod data from '{WeModExtenal}' to launcher dir '{WeModData}'"
 	)
 	if not os.path.isdir(WeModData):
 		os.makedirs(WeModData)  # Make wemod data folder if missing
@@ -249,7 +249,7 @@ def syncwemod(
 			# We ask what files to use
 
 			response = show_message(
-				f"Warnig wemod might have been installed previously.\nUse wemod laucher dir account (Yes) or\nUse wemod prefix/game dir account (No)",
+				f"Warning wemod might have been installed previously.\nUse wemod launcher dir account (Yes) or\nUse wemod prefix/game dir account (No)",
 				title="Multiple accounts found",
 				yesno=True,
 			)
@@ -265,7 +265,7 @@ def syncwemod(
 	if not os.path.isdir(WeModExtenal) and not os.path.islink(WeModExtenal):
 		os.symlink(
 			WeModData, WeModExtenal
-		)  # And symlink the data from the wemod laucher
+		)  # And symlink the data from the wemod launcher
 		log("Linked wemod data to gameprefix")
 
 	if not os.path.exists(
@@ -293,13 +293,13 @@ def init(proton: str, iswine: bool = False) -> None:
 			)
 		except Exception as e:
 			log(
-				f"Problem grabing the external wine version, using file, returned was:\n\t{e}"
+				f"Problem grabbing the external wine version, using file, returned was:\n\t{e}"
 			)
-			prefix_version_file = enshure_wine()
+			prefix_version_file = ensure_wine()
 		else:
-			prefix_version_file = enshure_wine(str(wver.stdout))
+			prefix_version_file = ensure_wine(str(wver.stdout))
 	else:
-		prefix_version_file = enshure_wine()
+		prefix_version_file = ensure_wine()
 	current_proton_version = read_file(prefix_version_file)
 	current_version_parts = parse_version(current_proton_version)
 	if current_version_parts == None:
@@ -363,7 +363,7 @@ def init(proton: str, iswine: bool = False) -> None:
 		):
 			response = show_message(
 				f"The Proton version {current_version_parts[0]}.{current_version_parts[1]} dosn't have WeMod installed. Would you like to attempt to use the closest proton version {cut_version[0]}.{cut_version[1]} that has WeMod installed, which may result in some issues?",
-				title="Mabye compatible WeMod version detected",
+				title="Maybe compatible WeMod version detected",
 				yesno=True,
 			)
 		else:
@@ -493,7 +493,7 @@ def download_prefix(proton_dir: str) -> None:
 	elif closest_version and current_version_parts:
 		response = show_message(
 			f"The current version {closest_version[0]}.{closest_version[1]} might not be compatible with version {current_version_parts[0]}.{current_version_parts[1]}, download and use it?",
-			title="Mabye copatible version found",
+			title="Maybe copatible version found",
 			yesno=True,
 		)
 	else:
@@ -705,7 +705,7 @@ def run(skip_init: bool = False) -> str:
 	# Make gamepath be relative to workdir (workdir is the root game dir)
 	REL_EXE = os.path.relpath(GAME_EXE, WORK_DIR)
 
-	# Make shure the relative gamepath is in windows format
+	# Make sure the relative gamepath is in windows format
 	WIN_CMD = winpath(REL_EXE, addfront="")
 
 	# Log the found parts of the command
