@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
 
 import os
-import sys
-import stat
 import shutil
+import site
+import stat
 import subprocess
+import sys
 
 from coreutils import (
-	log,
+	log, log_err,
 	pip,
 	exit_with_message,
+	show_message,
 )
 
 from corenodep import (
 	load_conf_setting,
 	save_conf_setting,
 	check_dependencies,
-)
-
-from coreutils import (
-	show_message,
 )
 
 from mainutils import (
@@ -180,14 +178,28 @@ def tk_check() -> None:
 	try:
 		if not bool(check_flatpak(None)):
 			import tkinter
-	except ImportError:
+	except ImportError as e:
 		exit_with_message(
-			"Tkinter missing",
-			"Critical error, tkinter is not installed.\nMake sure you have installed the correct tkinter package for your system;\nsearch the internet for 'install tkinter for YOURDISTRO',\nreplace YOURDISTRO with your actual distro",
+			"tkinter not found",
+			"tkinter was not found.\nMake sure you have installed the correct tkinter package for your system."
+			+f"\nException message: {e}",
 		)
 
 
 def venv_manager() -> List[Optional[str]]:
+	retval: List[Optional[str]] = []
+
+	# Add current venv if in one
+	if 'VIRTUAL_ENV' in os.environ and os.environ["VIRTUAL_ENV"].strip():
+		# FIXME: Adding site-packages to path from site module
+		# sys.path.extend(x for x in site.getsitepackages() if x not in sys.path)
+
+		# Adding site-packages to path manually (terrible code)
+		sys.path.append(os.path.join(os.environ["VIRTUAL_ENV"], "lib", "python"+'.'.join(map(str,sys.version_info[0:2])), "site-packages"))
+
+		# Adding to retval
+		retval.append(os.path.join(os.environ["VIRTUAL_ENV"], "bin", "python"))
+
 	requirements_txt = os.path.join(SCRIPT_PATH, "requirements.txt")
 	tk_check()
 	if not check_dependencies(requirements_txt):
@@ -272,17 +284,18 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 			] + gitcmd
 
 		# Fetch latest changes
-		subprocess.run(gitcmd + ["fetch"], text=True)
+		subprocess.run(gitcmd + ["fetch"], shell=True, text=True)
 
 		# Get local and remote commit hashes
 		local_hash = subprocess.run(
-			gitcmd + ["rev-parse", "@"], stdout=subprocess.PIPE, text=True
+			gitcmd + ["rev-parse", "@"], shell=True, stdout=subprocess.PIPE, text=True
 		).stdout.strip()
 		remote_hash = subprocess.run(
-			gitcmd + ["rev-parse", "@{u}"], stdout=subprocess.PIPE, text=True
+			gitcmd + ["rev-parse", "@{u}"], shell=True, stdout=subprocess.PIPE, text=True
 		).stdout.strip()
 		base_hash = subprocess.run(
 			gitcmd + ["merge-base", "@", "@{u}"],
+			shell=True,
 			stdout=subprocess.PIPE,
 			text=True,
 		).stdout.strip()
@@ -298,8 +311,8 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 					"Warning: Local changes detected, updating from remote anyway."
 				)
 
-			subprocess.run(gitcmd + ["reset", "--hard", "origin"], text=True)
-			subprocess.run(gitcmd + ["pull"], text=True)
+			subprocess.run(gitcmd + ["reset", "--hard", "origin"], shell=True, text=True)
+			subprocess.run(gitcmd + ["pull"], shell=True, text=True)
 
 			# Set executable permissions (replace with specific file names if needed)
 			subprocess.run(["chmod", "-R", "ug+x", "."], text=True)
@@ -309,7 +322,7 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 				path = [sys.executable]
 			log("Update finished")
 	except Exception as e:
-		log(f"Failed to update, the following error appeared:\n\t{e}")
+		log(f"Failed to update:\n\t{e}")
 	finally:
 		os.chdir(original_cwd)
 

@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import threading
+import traceback
 
 from typing import Optional
 
@@ -27,7 +28,7 @@ from coreutils import (
 	show_message,
 	monitor_file,
 	cache,
-	log,
+	log, log_err
 )
 
 # Import main utils
@@ -867,14 +868,14 @@ if __name__ == "__main__":
 	try:
 		RESP = run()
 	except Exception as e:
-		RESP = "ERR:\n" + str(e)
+		RESP = traceback.format_exc()
 		logy = show_message(
 			"Error occurred, open the log?", "Error occurred", 30, True
 		)
 
 	# Log final response or error
-	log(str(RESP))
-	log("\n\n\n")
+	log(RESP)
+	log("\n\n")
 
 	if not logy or logy == "Yes":
 		log(open_log=True)

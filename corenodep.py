@@ -36,8 +36,7 @@ def check_dependencies(requirements_file: str) -> bool:
 				importlib.import_module(package)
 			except ImportError as e:
 				from coreutils import log_err
-
-				log_err(f"{e}")
+				log_err(e)
 				ret = False
 	return ret
 
