@@ -185,30 +185,19 @@ def tk_check() -> None:
 			+f"\nException message: {e}",
 		)
 
+def is_flatpak() -> bool:
+	return "FLATPAK_ID" in os.environ or os.path.exists("/.flatpak-info")
 
 def venv_manager() -> List[Optional[str]]:
 	retval: List[Optional[str]] = []
-
-	# Add current venv if in one
-	if 'VIRTUAL_ENV' in os.environ and os.environ["VIRTUAL_ENV"].strip():
-		# FIXME: Adding site-packages to path from site module
-		# sys.path.extend(x for x in site.getsitepackages() if x not in sys.path)
-
-		# Adding site-packages to path manually (terrible code)
-		sys.path.append(os.path.join(os.environ["VIRTUAL_ENV"], "lib", "python"+'.'.join(map(str,sys.version_info[0:2])), "site-packages"))
-
-		# Adding to retval
-		retval.append(os.path.join(os.environ["VIRTUAL_ENV"], "bin", "python"))
 
 	requirements_txt = os.path.join(SCRIPT_PATH, "requirements.txt")
 	tk_check()
 	if not check_dependencies(requirements_txt):
 		pip_install = f"install -r '{requirements_txt}'"
 		return_code = pip(pip_install)
-		if return_code == 0:
-			return []
-		# if dependencies cant just be installed
-		else:
+		# if dependencies can't be installed
+		if return_code != 0:
 			# go the venv route
 			venv_path = mk_venv()
 			if not venv_path:
@@ -253,6 +242,7 @@ def venv_manager() -> List[Optional[str]]:
 					ask_for_log=True,
 				)
 			return [venv_python]
+	return retval
 
 
 def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
@@ -277,7 +267,7 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 	try:
 		os.chdir(SCRIPT_PATH)
 		gitcmd = ["git"]
-		if "FLATPAK_ID" in os.environ or os.path.exists("/.flatpak-info"):
+		if is_flatpak():
 			gitcmd = [
 				"flatpak-spawn",
 				"--host",
@@ -331,11 +321,11 @@ def self_update(path: List[Optional[str]]) -> List[Optional[str]]:
 
 def check_flatpak(flatpak_cmd: Optional[List[str]]) -> List[str]:
 	if flatpak_cmd == None:
-		if "FLATPAK_ID" in os.environ or os.path.exists("/.flatpak-info"):
+		if is_flatpak():
 			return ["True"]
 		return []
 	else:
-		if "FLATPAK_ID" in os.environ or os.path.exists("/.flatpak-info"):
+		if is_flatpak():
 			flatpak_start = [
 				"flatpak-spawn",
 				"--host",
@@ -370,6 +360,7 @@ def check_flatpak(flatpak_cmd: Optional[List[str]]) -> List[str]:
 			else:  # if not use python executable
 				flatpak_cmd = flatpak_start + [sys.executable]
 
+		log(str(flatpak_cmd))
 		return flatpak_cmd
 
 
