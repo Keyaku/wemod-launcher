@@ -66,6 +66,10 @@ if __name__ == "__main__":
     script_manager()
     # Make venv if needed and return path
     python_venv = venv_manager()
+    # Re-execute this script with the venv Python
+    if sys.executable != python_venv[0]:
+        log(f"Re-executing wemod with {python_venv[0]}")
+        os.execl(python_venv[0], python_venv[0], *sys.argv)
     # Update the script
     python_venv = self_update(python_venv)
     # Detect if the script is running inside a flatpak

@@ -154,87 +154,86 @@ def mk_venv() -> Optional[str]:
     venv_path = load_conf_setting("VirtualEnvironment")
     if not venv_path:
         venv_path = "wemod_venv"
+    venv_exec = [sys.executable, "-m", "venv"]
     try:
-        if os.path.isabs(venv_path):
-            subprocess.run(
-                [sys.executable, "-m", "venv", venv_path], check=True
-            )
-        else:
-            subprocess.run(
-                [
-                    sys.executable,
-                    "-m",
-                    "venv",
-                    os.path.abspath(os.path.join(SCRIPT_PATH, venv_path)),
-                ],
-                check=True,
-            )
+        # Define absolute venv's path
+        if not os.path.isabs(venv_path):
+            venv_path = os.path.abspath(os.path.join(SCRIPT_PATH, venv_path))
+
+        # Check if custom venv is already installed or running
+        if sys.executable.startswith(venv_path):
+            # Silently accept
+            return venv_path
+        elif os.path.exists(venv_path):
+            log("Virtual environment already exists.")
+            return venv_path
+
+        venv_exec.append(venv_path)
+        # Allow use of system packages (if not Flatpak)
+        if not bool(check_flatpak(None)):
+            venv_exec.append("--system-site-packages")
+        subprocess.run(venv_exec, check=True)
         log("Virtual environment created successfully.")
     except Exception as e:
         log(f"Failed to create virtual environment, with error {e}")
-        return None
     else:
         save_conf_setting("VirtualEnvironment", venv_path)
         return venv_path
 
+    # If code reaches here, venv might not be installed in system
+    if not venv_path:
+        log("Trying to force install venv")
+        return_code = pip("install --break-system-packages venv")
+        if return_code == 0:
+            venv_path = mk_venv()
+            if not venv_path:
+                log(
+                    "CRITICAL: Backup failed to create virtual environment, exiting"
+                )
+                exit_with_message(
+                    "Error on package venv",
+                    "Failed to create virtual environment. Error.",
+                    ask_for_log=True,
+                )
+        else:
+            log(
+                "CRITICAL: The python package 'venv' is not installed and could not be downloaded"
+            )
+            exit_with_message(
+                "Missing python-venv",
+                "The python package 'venv' is not installed and could not be downloaded. Error.",
+                ask_for_log=True,
+            )
 
 def tk_check() -> None:
     try:
         if not bool(check_flatpak(None)):
             import tkinter
-    except ImportError:
+    except ImportError as ex:
         exit_with_message(
-            "Tkinter missing",
-            "Critical error, tkinter is not installed,\nmake sure you have installed the correct tkinter package for your system,\nsearch the internet for 'install tkinter for YOURDISTRO',\nreplace YOURDISTRO with your actual distro",
+            "Critical error: Tkinter missing",
+            f"Critical error: tkinter is not installed.\nMake sure you have installed the correct tkinter package for your system,\nsearch the internet for 'install tkinter for YOURDISTRO',\nreplace YOURDISTRO with your actual distro.\nError message: {ex.msg}",
         )
 
 
 def venv_manager() -> List[Optional[str]]:
-    requirements_txt = os.path.join(SCRIPT_PATH, "requirements.txt")
-    tk_check()
-    if not check_dependencies(requirements_txt):
-        pip_install = f"install -r '{requirements_txt}'"
-        return_code = pip(pip_install)
-        if return_code == 0:
-            return []
-        # if dependencies cant just be installed
-        else:
-            # go the venv route
-            venv_path = mk_venv()
-            if not venv_path:
-                log(
-                    "Failed to create virtual environment, trying to force install venv"
-                )
-                return_code = pip("install --break-system-packages venv")
-                if return_code == 0:
-                    venv_path = mk_venv()
-                    if not venv_path:
-                        log(
-                            "CRITICAL: Backup failed to create virtual environment, exiting"
-                        )
-                        exit_with_message(
-                            "Error on package venv",
-                            "Failed to create virtual environment. Error.",
-                            ask_for_log=True,
-                        )
-                else:
-                    log(
-                        "CRITICAL: The python package 'venv' is not installed and could not be downloaded"
-                    )
-                    exit_with_message(
-                        "Missing python-venv",
-                        "The python package 'venv' is not installed and could not be downloaded. Error.",
-                        ask_for_log=True,
-                    )
-            # At this point we have a venv
-            if venv_path and not os.path.isabs(venv_path):
-                venv_path = os.path.join(SCRIPT_PATH, venv_path)
+    venv_list = []
 
-            # Determine the path to the Python executable within the virtual environment
-            venv_python = os.path.join(venv_path, "bin", "python")
+    # go the venv route
+    venv_path = mk_venv()
+    # Determine the path to the Python executable within the virtual environment
+    venv_python = os.path.join(venv_path, "bin", "python")
+    venv_list.append(venv_python)
+
+    # using local venv, check system requirements
+    if sys.executable == venv_python:
+        # install Python requirements
+        requirements_txt = os.path.join(SCRIPT_PATH, "requirements.txt")
+        if not check_dependencies(requirements_txt):
+            pip_install = f"install -r '{requirements_txt}'"
 
             # Pre-install dependencies in the virtual environment
-            return_code = pip(pip_install, venv_path)
+            return_code = pip(pip_install)
             if return_code != 0:
                 log("CRITICAL: Dependencies can't be installed")
                 exit_with_message(
@@ -242,7 +241,9 @@ def venv_manager() -> List[Optional[str]]:
                     "Failed to install dependencies. Error.",
                     ask_for_log=True,
                 )
-            return [venv_python]
+        tk_check()
+
+    return venv_list
 
 
 def self_update(path: List[Optional[str]]) -> List[Optional[str]]:

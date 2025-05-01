@@ -35,10 +35,10 @@ def check_dependencies(requirements_file: str) -> bool:
             package = line.strip().split("==")[0].strip()
             try:
                 importlib.import_module(package)
-            except ImportError:
+            except ImportError as ex:
                 from coreutils import log
 
-                log(f"Package '{package}' is missing")
+                log(f"Error with package '{package}': {ex.msg}")
                 ret = False
     return ret
 
