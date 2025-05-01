@@ -205,6 +205,7 @@ def mk_venv() -> Optional[str]:
                 ask_for_log=True,
             )
 
+
 def tk_check() -> None:
     try:
         if not bool(check_flatpak(None)):
@@ -224,6 +225,18 @@ def venv_manager() -> List[Optional[str]]:
     # Determine the path to the Python executable within the virtual environment
     venv_python = os.path.join(venv_path, "bin", "python")
     venv_list.append(venv_python)
+
+    # Add wemod_libs to LD_LIBRARY_PATH
+    wemod_libs = os.path.join(SCRIPT_PATH, "wemod_libs")
+    if not os.path.exists(wemod_libs):
+        os.makedirs(wemod_libs, exist_ok=True)
+    # Set LD_LIBRARY_PATH with local libs
+    ld_library_path = os.environ.get('LD_LIBRARY_PATH', '')
+    lib_paths = set(ld_library_path.split(':')) if ld_library_path else set()
+    if wemod_libs not in lib_paths:
+        lib_paths.add(wemod_libs)
+        ld_library_path = ':'.join(lib_paths)
+        os.environ['LD_LIBRARY_PATH'] = ld_library_path
 
     # using local venv, check system requirements
     if sys.executable == venv_python:

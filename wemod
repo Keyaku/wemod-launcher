@@ -68,7 +68,7 @@ if __name__ == "__main__":
     python_venv = venv_manager()
     # Re-execute this script with the venv Python
     if sys.executable != python_venv[0]:
-        log(f"Re-executing wemod with {python_venv[0]}")
+        log(f"Re-executing wemod with local venv. Args: {sys.argv}")
         os.execl(python_venv[0], python_venv[0], *sys.argv)
     # Update the script
     python_venv = self_update(python_venv)

@@ -2,6 +2,7 @@
 .vscode/
 wemod_bin/
 wemod_data/
+wemod_libs/
 wemod_venv/
 __pycache__/
 wemod.conf
